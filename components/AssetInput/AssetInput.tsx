@@ -17,6 +17,11 @@ interface AssetInputProps {
   showList?: boolean
   onInputFocus?: () => void
   balance?: number
+  /*
+   * The amount of token to withold when the user clicks the max button.
+   * This is typically based upon the gas estimated for the tx that's being prepared.
+   */
+  maxToWithold?: number
   whalePrice?: number
   disabled?: boolean
   hideHalfMax?: boolean
@@ -34,6 +39,7 @@ interface AssetInputProps {
 const AssetInput = forwardRef((props: AssetInputProps, _) => {
   const {
     balance,
+    maxToWithold = 0,
     disabled,
     isSingleInput,
     token,
@@ -47,7 +53,7 @@ const AssetInput = forwardRef((props: AssetInputProps, _) => {
   const baseToken = useBaseTokenInfo()
   const onMaxClick = () => {
     const isTokenAndBaseTokenSame = tokenInfo?.symbol === baseToken?.symbol
-    const feeSubtraction = balance < 1 ? (balance / 100) * 0.01 : 0.1
+    const feeSubtraction = balance < 1 ? (balance / 100) * 0.01 : maxToWithold
     onChange({
       ...token,
       amount:

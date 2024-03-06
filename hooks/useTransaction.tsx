@@ -9,6 +9,7 @@ import { ChainId } from 'constants/index'
 import { TxStep } from 'types/index'
 
 import Finder from '../components/Finder'
+import { createGasFee } from '../services/treasuryService'
 import useDebounceValue from './useDebounceValue'
 
 type Params = {
@@ -127,6 +128,10 @@ export const useTransaction = ({
     },
   )
 
+  const gasFee = () => createGasFee(
+    signingClient ||
+    injectiveSigningClient, senderAddress, debouncedMsgs,
+  )
   const { mutate } = useMutation(() => directTokenSwap({
     tokenA,
     swapAddress,
@@ -248,6 +253,7 @@ export const useTransaction = ({
 
   return useMemo(() => ({
     fee,
+    gasFee,
     buttonLabel,
     submit,
     txStep,
@@ -257,5 +263,5 @@ export const useTransaction = ({
     reset,
   }),
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  [txStep, txInfo, txHash, error, reset, fee])
+  [txStep, txInfo, txHash, error, reset, fee, gasFee])
 }

@@ -21,6 +21,7 @@ import { useTokenBalance } from 'hooks/useTokenBalance'
 import { useTokenInfo } from 'hooks/useTokenInfo'
 import { fromChainAmount, num } from 'libs/num'
 import { TokenItemState, TxStep } from 'types/index'
+import { createGasFee } from '../../../../services/treasuryService'
 
 type Props = {
   isWalletConnected: boolean
@@ -243,7 +244,9 @@ const SwapForm: FC<Props> = ({
   }, [simulated])
 
   const isInputDisabled = tx?.txStep === TxStep.Posting
+  const maxToWitholdCalculation = tx;
 
+  console.log(maxToWitholdCalculation, 'tx fee')
   return (
     <VStack
       paddingX={{ base: 6,
@@ -276,6 +279,7 @@ const SwapForm: FC<Props> = ({
               {...field}
               token={tokenA}
               balance={tokenABalance}
+              // maxToWithold={}
               hideHalfMax={false}
               mobile={isMobile}
               disabled={isInputDisabled}
